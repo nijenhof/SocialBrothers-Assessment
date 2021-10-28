@@ -1,24 +1,26 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.OData;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
 using SBAssessment.Data;
+using SBAssessment.Data.Interfaces;
+using SBAssessment.Data.Repositories;
 
 namespace SBAssessment.API
 {
     public class Startup
     {
+        public IConfiguration Configuration { get; }
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
         }
 
-        public IConfiguration Configuration { get; }
 
-        // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<DbContextBase>(options =>
@@ -26,14 +28,19 @@ namespace SBAssessment.API
                 options.UseSqlite(Configuration.GetConnectionString("mainDB"));
             });
 
-            services.AddControllers();
+            services.AddControllers()
+                .AddOData(opt => opt.Count().Filter().Expand().Select().OrderBy());
+
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "SBAssessment.API", Version = "v1" });
             });
+
+
+            services.AddScoped<IAddressRepository, AddressRepository>();
+
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
@@ -41,6 +48,10 @@ namespace SBAssessment.API
                 app.UseDeveloperExceptionPage();
                 app.UseSwagger();
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "SBAssessment.API v1"));
+            }
+            else
+            {
+                app.UseExceptionHandler("/error");
             }
 
             app.UseHttpsRedirection();
@@ -51,6 +62,7 @@ namespace SBAssessment.API
 
             app.UseEndpoints(endpoints =>
             {
+
                 endpoints.MapControllers();
             });
         }

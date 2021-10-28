@@ -4,6 +4,7 @@ namespace SBAssessment.Data.Entities
 {
     public class Address
     {
+#pragma warning disable CS8618 // Filled by entity framework
         [Required]
         public int Id { get; set; }
 
@@ -22,5 +23,6 @@ namespace SBAssessment.Data.Entities
 
         [Required]
         public string Country { get; set; }
+#pragma warning restore CS8618 
     }
 }
