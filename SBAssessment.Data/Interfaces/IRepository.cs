@@ -23,6 +23,5 @@ namespace SBAssessment.Data.Interfaces
         void Remove(int id);
 
         void Update(TEntity entity);
-        void Update(int id, TEntity entity);
     }
 }

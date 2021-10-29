@@ -1,11 +1,15 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.AspNetCore.OData.Query;
 using Microsoft.AspNetCore.OData.Query.Validator;
 using Microsoft.Extensions.Logging;
 using Microsoft.OData;
 using SBAssessment.Data.Entities;
 using SBAssessment.Data.Interfaces;
+using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 
 namespace SBAssessment.API.Controllers
 {
@@ -22,7 +26,56 @@ namespace SBAssessment.API.Controllers
             _addressRepository = addressRepository;
         }
 
+        /// <summary>
+        /// Retrieves addresses with OData filter/search functionality
+        /// </summary>
+        /// <remarks>
+        ///     /api/Address?$filter=StreetName eq 'Lievensweg'
+        ///     
+        /// Or
+        /// 
+        ///     /api/Address?$filter=contains(StreetName, 'weg')
+        ///     
+        /// Select
+        /// 
+        ///     /api/Address?$select=Id
+        ///     
+        /// OrderBy
+        /// 
+        ///     /api/Address?$orderby=StreetNumber desc
+        ///     
+        /// </remarks>
+        /// <param name="queryOptions" type="string">OData based filter string</param>
+        /// <returns></returns>
+        /// 
+
+        /// <summary>
+        /// Retrieves addresses with OData filter/search functionality
+        /// </summary>
+        /// <remarks>
+        /// Filter - equals    
+        ///     /api/Address?$filter=StreetName eq 'Lievensweg'
+        ///     
+        /// Filter - contains
+        /// 
+        ///     /api/Address?$filter=contains(StreetName, 'weg')
+        ///     
+        /// Select - only id
+        /// 
+        ///     /api/Address?$select=Id
+        ///     
+        /// OrderBy
+        /// 
+        ///     /api/Address?$orderby=StreetNumber desc
+        /// </remarks>
+        /// <param name="queryOptions" type="string">OData based filter string</param>
+        /// <returns></returns>
         [HttpGet]
+        //[EnableQuery]
+        [Produces("application/json")]
+        [ProducesResponseType(typeof(IEnumerable<Address>), (int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
+
         public IActionResult Get(ODataQueryOptions<Address> queryOptions)
         {
             try
@@ -42,27 +95,56 @@ namespace SBAssessment.API.Controllers
 
 
         [HttpGet("{id}")]
-        public Address Get(int id)
+        [Produces("application/json")]
+        [ProducesResponseType(typeof(Address), (int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
+        public IActionResult Get(int id)
         {
-            return _addressRepository.Get(id);
+            var address = _addressRepository.Get(id);
+
+            if (address == null) return NotFound("No address with that Id could be found");
+
+            return Ok(address);
         }
 
 
         [HttpPost]
-        public void Post([FromBody] Address value)
+        [Produces("application/json")]
+        [ProducesResponseType((int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
+        public IActionResult Post([FromBody] Address value)
         {
+            if (!ModelState.IsValid) return BadRequest(GetValidationProblemDetails(ModelState));
+
+            if (value.Id != 0)
+            {
+                Address existingEntity = _addressRepository.Get(value.Id);
+                if (existingEntity != null) return BadRequest($"An address with id {value.Id} already exists.");
+            }
+
             _addressRepository.Add(value);
+            return Ok();
         }
 
 
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody] Address value)
+        [Produces("application/json")]
+        [ProducesResponseType((int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
+        public IActionResult Put(int id, [FromBody] Address value)
         {
-            _addressRepository.Update(id, value);
+            if (!ModelState.IsValid) return BadRequest(GetValidationProblemDetails(ModelState));
+
+            value.Id = id;
+
+            _addressRepository.Update(value);
+            return Ok();
         }
 
 
         [HttpDelete("{id}")]
+        [Produces("application/json")]
+        [ProducesResponseType((int)HttpStatusCode.OK)]
         public void Delete(int id)
         {
             _addressRepository.Remove(id);
@@ -71,6 +153,13 @@ namespace SBAssessment.API.Controllers
         private static ODataValidationSettings GetValidationSettings()
         {
             return new ODataValidationSettings();
+        }
+        private static ProblemDetails GetValidationProblemDetails(ModelStateDictionary modelState)
+        {
+            return new ValidationProblemDetails(modelState)
+            {
+                Status = StatusCodes.Status400BadRequest
+            };
         }
     }
 }

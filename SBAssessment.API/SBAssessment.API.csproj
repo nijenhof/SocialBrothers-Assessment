@@ -2,6 +2,8 @@
 
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <NoWarn>$(NoWarn);1591</NoWarn>
   </PropertyGroup>
 
   <ItemGroup>
@@ -21,6 +23,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\SBAssessment.Data\SBAssessment.Data.csproj" />
+    <ProjectReference Include="..\SBAssessment.GeoLocation\SBAssessment.GeoLocation.csproj" />
   </ItemGroup>
 
 </Project>

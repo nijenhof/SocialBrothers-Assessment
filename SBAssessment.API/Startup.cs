@@ -9,6 +9,11 @@ using Microsoft.OpenApi.Models;
 using SBAssessment.Data;
 using SBAssessment.Data.Interfaces;
 using SBAssessment.Data.Repositories;
+using SBAssessment.GeoLocation;
+using SBAssessment.GeoLocation.Interfaces;
+using System;
+using System.IO;
+using System.Reflection;
 
 namespace SBAssessment.API
 {
@@ -28,17 +33,22 @@ namespace SBAssessment.API
                 options.UseSqlite(Configuration.GetConnectionString("mainDB"));
             });
 
+            services.AddHttpClient();
+
             services.AddControllers()
                 .AddOData(opt => opt.Count().Filter().Expand().Select().OrderBy());
 
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "SBAssessment.API", Version = "v1" });
+                var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+                var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+                c.IncludeXmlComments(xmlPath);
             });
 
 
             services.AddScoped<IAddressRepository, AddressRepository>();
-
+            services.AddScoped<IDistanceCalculator, MapQuestDistanceCalculator>();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

@@ -81,14 +81,5 @@ namespace SBAssessment.Data.Repositories
             Entities.Update(entity);
             Context.SaveChanges();
         }
-        public void Update(int id, TEntity entity)
-        {
-            TEntity? existingEntity = Entities.Find(id);
-            if (existingEntity == null) return;
-
-            Context.Entry(existingEntity).CurrentValues.SetValues(entity);
-
-            Context.SaveChanges();
-        }
     }
 }
