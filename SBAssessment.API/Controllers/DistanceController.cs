@@ -20,6 +20,12 @@ namespace SBAssessment.API.Controllers
             this.distanceCalculator = distanceCalculator;
         }
 
+        /// <summary>
+        /// Calculates distance (in km) between two addresses
+        /// </summary>
+        /// <param name="startAddressId"></param>
+        /// <param name="endAddressId"></param>
+        /// <returns></returns>
         [HttpGet("api/calculate-distance")]
         [ProducesResponseType(typeof(int), (int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]

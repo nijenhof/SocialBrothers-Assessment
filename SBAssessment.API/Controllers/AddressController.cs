@@ -30,30 +30,8 @@ namespace SBAssessment.API.Controllers
         /// Retrieves addresses with OData filter/search functionality
         /// </summary>
         /// <remarks>
-        ///     /api/Address?$filter=StreetName eq 'Lievensweg'
-        ///     
-        /// Or
+        /// Filter - equals
         /// 
-        ///     /api/Address?$filter=contains(StreetName, 'weg')
-        ///     
-        /// Select
-        /// 
-        ///     /api/Address?$select=Id
-        ///     
-        /// OrderBy
-        /// 
-        ///     /api/Address?$orderby=StreetNumber desc
-        ///     
-        /// </remarks>
-        /// <param name="queryOptions" type="string">OData based filter string</param>
-        /// <returns></returns>
-        /// 
-
-        /// <summary>
-        /// Retrieves addresses with OData filter/search functionality
-        /// </summary>
-        /// <remarks>
-        /// Filter - equals    
         ///     /api/Address?$filter=StreetName eq 'Lievensweg'
         ///     
         /// Filter - contains
@@ -71,7 +49,6 @@ namespace SBAssessment.API.Controllers
         /// <param name="queryOptions" type="string">OData based filter string</param>
         /// <returns></returns>
         [HttpGet]
-        //[EnableQuery]
         [Produces("application/json")]
         [ProducesResponseType(typeof(IEnumerable<Address>), (int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
@@ -94,6 +71,11 @@ namespace SBAssessment.API.Controllers
         }
 
 
+        /// <summary>
+        /// Returns details for a single address
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [HttpGet("{id}")]
         [Produces("application/json")]
         [ProducesResponseType(typeof(Address), (int)HttpStatusCode.OK)]
@@ -108,6 +90,11 @@ namespace SBAssessment.API.Controllers
         }
 
 
+        /// <summary>
+        /// Creates a new address
+        /// </summary>
+        /// <param name="value"></param>
+        /// <returns></returns>
         [HttpPost]
         [Produces("application/json")]
         [ProducesResponseType((int)HttpStatusCode.OK)]
@@ -127,6 +114,12 @@ namespace SBAssessment.API.Controllers
         }
 
 
+        /// <summary>
+        /// Updates an existing address
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="value"></param>
+        /// <returns></returns>
         [HttpPut("{id}")]
         [Produces("application/json")]
         [ProducesResponseType((int)HttpStatusCode.OK)]
@@ -142,6 +135,10 @@ namespace SBAssessment.API.Controllers
         }
 
 
+        /// <summary>
+        /// Deletes an address
+        /// </summary>
+        /// <param name="id"></param>
         [HttpDelete("{id}")]
         [Produces("application/json")]
         [ProducesResponseType((int)HttpStatusCode.OK)]

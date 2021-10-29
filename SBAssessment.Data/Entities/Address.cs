@@ -15,6 +15,7 @@ namespace SBAssessment.Data.Entities
         public string StreetNumber { get; set; }
 
         [Required]
+        [RegularExpression(@"^[1-9][0-9]{3} *(?:[a-zA-Z]{2})$", ErrorMessage = "No valid postal code was provided")]
         [DataType(DataType.PostalCode)]
         public string PostalCode { get; set; }
 

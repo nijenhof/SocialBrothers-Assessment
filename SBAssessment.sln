@@ -7,8 +7,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SBAssessment.API", "SBAsses
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SBAssessment.Data", "SBAssessment.Data\SBAssessment.Data.csproj", "{B6DB4F84-579A-4C8A-AB4D-B96E664E1E0C}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SBAssessment.Shared", "SBAssessment.Shared\SBAssessment.Shared.csproj", "{6BE69898-D9B3-4B64-A611-13EECE604C96}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SBAssessment.GeoLocation", "SBAssessment.GeoLocation\SBAssessment.GeoLocation.csproj", "{108642F1-C248-48F9-98C7-5BE74A007A22}"
 EndProject
 Global
@@ -25,10 +23,6 @@ Global
 		{B6DB4F84-579A-4C8A-AB4D-B96E664E1E0C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B6DB4F84-579A-4C8A-AB4D-B96E664E1E0C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B6DB4F84-579A-4C8A-AB4D-B96E664E1E0C}.Release|Any CPU.Build.0 = Release|Any CPU
-		{6BE69898-D9B3-4B64-A611-13EECE604C96}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{6BE69898-D9B3-4B64-A611-13EECE604C96}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{6BE69898-D9B3-4B64-A611-13EECE604C96}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{6BE69898-D9B3-4B64-A611-13EECE604C96}.Release|Any CPU.Build.0 = Release|Any CPU
 		{108642F1-C248-48F9-98C7-5BE74A007A22}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{108642F1-C248-48F9-98C7-5BE74A007A22}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{108642F1-C248-48F9-98C7-5BE74A007A22}.Release|Any CPU.ActiveCfg = Release|Any CPU
